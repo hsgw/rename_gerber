@@ -2,30 +2,30 @@ use std::fs;
 use std::path::PathBuf;
 use std::env;
 
-struct GerberExtention<'a> {
+struct GerberExtension<'a> {
     from: &'a str,
     to: &'a str
 }
 
-const GERBER_EXTENTIONS: [GerberExtention; 9] = [
-    GerberExtention{from: "-B.SilkS.gbr", to: ".GBO"},
-    GerberExtention{from: "-B.Mask.gbr", to: ".GBS"},
-    GerberExtention{from: "-B.Cu.gbr", to: ".GBL" },
-    GerberExtention{from: "-F.Cu.gbr", to: ".GTL" },
-    GerberExtention{from: "-F.Mask.gbr", to: ".GTS" },
-    GerberExtention{from: "-F.SilkS.gbr", to: ".GTO" },
-    GerberExtention{from: "-Edge.Cuts.gbr", to: ".GKO" },
-    GerberExtention{from: "-NPTH.TXT", to: "-NPTH.TXT" },
-    GerberExtention{from: "-PTH.TXT", to: "-PTH.TXT" }
+const GERBER_EXTENSIONS: [GerberExtension; 9] = [
+    GerberExtension{from: "-B.SilkS.gbr", to: ".GBO"},
+    GerberExtension{from: "-B.Mask.gbr", to: ".GBS"},
+    GerberExtension{from: "-B.Cu.gbr", to: ".GBL" },
+    GerberExtension{from: "-F.Cu.gbr", to: ".GTL" },
+    GerberExtension{from: "-F.Mask.gbr", to: ".GTS" },
+    GerberExtension{from: "-F.SilkS.gbr", to: ".GTO" },
+    GerberExtension{from: "-Edge.Cuts.gbr", to: ".GKO" },
+    GerberExtension{from: "-NPTH.TXT", to: "-NPTH.TXT" },
+    GerberExtension{from: "-PTH.TXT", to: "-PTH.TXT" }
 ];
 
 struct FileData<'a> {
     file_name: String,
     path: PathBuf,
-    ext: &'a GerberExtention<'a>
+    ext: &'a GerberExtension<'a>
 }
 
-fn find_by_extention( file_data: &Vec<FileData>, ext: &GerberExtention) -> Option<usize> {
+fn find_by_extention( file_data: &Vec<FileData>, ext: &GerberExtension) -> Option<usize> {
     file_data.iter().position(|x| x.ext.to == ext.to)
 }
 
@@ -54,7 +54,7 @@ fn main() {
         let file = entry.unwrap();
         let file_name = file.file_name();
         let file_name = file_name.into_string().unwrap();
-        for ext in GERBER_EXTENTIONS.iter() {
+        for ext in GERBER_EXTENSIONS.iter() {
             if let Some(_) = file_name.find(ext.from) {
                 if let Some(pos) = find_by_extention(&file_data, &ext) {
                     println!("{} is already found! {}, {}", ext.from, file_data[pos].file_name, file_name);
@@ -67,7 +67,7 @@ fn main() {
 
     let mut has_missing_file = false;
 
-    for ext in GERBER_EXTENTIONS.iter() {
+    for ext in GERBER_EXTENSIONS.iter() {
         if let Some(_) = find_by_extention(&file_data, &ext) {
             // println!("{} --- {}", ext.to, file_data[i].file_name);
         } else {

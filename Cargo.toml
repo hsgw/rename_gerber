@@ -1,0 +1,6 @@
+[package]
+name = "rename_gerber"
+version = "0.1.0"
+authors = ["hsgw <urkwtky@gmail.com>"]
+
+[dependencies]
